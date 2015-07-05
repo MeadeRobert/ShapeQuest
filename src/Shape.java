@@ -8,7 +8,6 @@ public class Shape {
 	private Random r = new Random();
 	
 	//shape variables
-	//TODO implement all getters and setters.. meh
 	private int shapex;
 	private int shapey;
 	private int sides;
@@ -27,7 +26,7 @@ public class Shape {
 		this.sides = sides;
 		this.color = color;
 		this.style = style;
-		this.m = m;
+		this.setM(m);
 		this.shapex = shapex;
 		this.shapey = shapey;
 	}
@@ -64,40 +63,39 @@ public class Shape {
 		}
 
 		switch (this.sides) {
-		case 1:
-			// draw a circle
-			if (style == 1) {
-				g.drawOval(shapex, shapey, this.size, this.size);
-			} else {
-				g.fillOval(shapex, shapey, this.size, this.size);
-			}
-		case 3:
-			//declare variables needed for ****Polygon() methods
-			int xpoints[] = new int[3];
-			int ypoints[] = new int[3];
-			shapewidth = this.size;
-
-			// algorithm for height of an equilateral triangle
-			shapeheight = (int) Math.sqrt(shapewidth * shapewidth
-					- shapewidth / 2 * shapewidth / 2);
-
-			// setup triangle points
-			xpoints[0] = shapex;
-			ypoints[0] = shapey - shapeheight;
-			xpoints[1] = shapex + shapewidth / 2;
-			ypoints[1] = shapey;
-			xpoints[2] = shapex - shapewidth / 2;
-			ypoints[2] = shapey;
-
-			// draw the triangle
-			if (this.style == 1) {
-				g.drawPolygon(xpoints, ypoints, sides);
-			} else {
-				g.fillPolygon(xpoints, ypoints, sides);
-			}
-			break;
+			case 1:
+				// draw a circle
+				if (style == 1) {
+					g.drawOval(shapex, shapey, this.size, this.size);
+				} else {
+					g.fillOval(shapex, shapey, this.size, this.size);
+				}
+			case 3:
+				//declare variables needed for ****Polygon() methods
+				int xpoints[] = new int[3];
+				int ypoints[] = new int[3];
+				shapewidth = this.size;
+	
+				//algorithm for height of an equilateral triangle
+				shapeheight = (int) Math.sqrt(shapewidth * shapewidth
+						- shapewidth / 2 * shapewidth / 2);
+	
+				// setup triangle points
+				xpoints[0] = shapex;
+				ypoints[0] = shapey - shapeheight;
+				xpoints[1] = shapex + shapewidth / 2;
+				ypoints[1] = shapey;
+				xpoints[2] = shapex - shapewidth / 2;
+				ypoints[2] = shapey;
+	
+				// draw the triangle
+				if (this.style == 1) {
+					g.drawPolygon(xpoints, ypoints, sides);
+				} else {
+					g.fillPolygon(xpoints, ypoints, sides);
+				}
+				break;
 		}
-
 	}
 
 	//getters and setters; "these are not the droids you're looking for"
@@ -155,6 +153,22 @@ public class Shape {
 	
 	public void setStyle(int style){
 		this.style = style;
+	}
+
+	public Random getR() {
+		return r;
+	}
+
+	public void setR(Random r) {
+		this.r = r;
+	}
+
+	public Main getM() {
+		return m;
+	}
+
+	public void setM(Main m) {
+		this.m = m;
 	}
 	
 }

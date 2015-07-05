@@ -3,15 +3,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.util.Random;
 
-public class Main extends Applet implements Runnable, KeyListener,
-		MouseListener, MouseMotionListener
+public class Main extends Applet implements Runnable, MouseListener
 {
 
 	/**
@@ -43,10 +39,8 @@ public class Main extends Applet implements Runnable, KeyListener,
 	@Override
 	public void init()
 	{
-		// listen for User interaction
-		addMouseMotionListener(this);
+		// listen for UI
 		addMouseListener(this);
-		addKeyListener(this);
 
 		// setup default window parameters
 		setBackground(Color.black);
@@ -198,25 +192,6 @@ public class Main extends Applet implements Runnable, KeyListener,
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e)
-	{
-		// DO NOT USE: MAY GLITCH TO NEXT SCREEN
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent arg0)
-	{
-		// TODO hello world
-
-	}
-
-	@Override
-	public void mouseExited(MouseEvent arg0)
-	{
-		// TODO hello world
-	}
-
-	@Override
 	public void mousePressed(MouseEvent e)
 	{
 		for (byte i = 0; i < shapes.length; i++)
@@ -274,46 +249,7 @@ public class Main extends Applet implements Runnable, KeyListener,
 		}
 	}
 
-	@Override
-	public void mouseReleased(MouseEvent arg0)
-	{
-		nextScreen();
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent arg0)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent arg0)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void keyPressed(KeyEvent arg0)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0)
-	{
-		// TODO Auto-generated method stub
-
-	}
+	
 
 	public void restart()
 	{
@@ -324,23 +260,12 @@ public class Main extends Applet implements Runnable, KeyListener,
 
 	public void nextScreen()
 	{
-		boolean isduplicate;
 
 		for (byte i = 0; i < drawn_shapes.length; i++)
 		{
 			drawn_shapes[i] = 0;
 		}
-		// some helpful shape class constructor documentation:
-
-		// Shape(int sides, int color, int style, int shapex, int shapey, Main
-		// m);
-		// sides: circle=0, triangle=1, square=2; no ellipses or other
-		// rectangles
-		// color: see switch case (cases 1 to 8)
-		// style: solid=0, line=1
-		// s = new Shape(1, 2, 0, r.nextInt(this.getWidth()),
-		// r.nextInt(this.getHeight()), this);
-
+		
 		// reset timer
 		second = 240;
 
@@ -350,13 +275,11 @@ public class Main extends Applet implements Runnable, KeyListener,
 		for (byte j = 0; j < drawn_shapes.length; j++)
 		{
 			drawn_shapes[j] = r.nextInt(32);
-			isduplicate = isDuplicate(j);
+			CorrectDuplicates(j);
 		}
 
 		for (byte i = 0; i < shapes.length; i++)
 		{
-			// TODO extrapolate shapes from possible shape array and put them
-			// into shapes[]
 			shapes[i] = possible_shapes[drawn_shapes[i]];
 			shapes[i].setShapeX(r.nextInt((this.getWidth() - 300) - 100) + 250);
 			shapes[i]
@@ -369,7 +292,7 @@ public class Main extends Applet implements Runnable, KeyListener,
 					answer = new Shape(shapes[answernum].getSides(),
 							shapes[answernum].getColor(),
 							shapes[answernum].getStyle(), 36, 36, this);
-					// for triangle
+				// for triangle
 				}
 				else
 				{
@@ -382,17 +305,39 @@ public class Main extends Applet implements Runnable, KeyListener,
 
 	}
 
-	public boolean isDuplicate(byte j)
+	public void CorrectDuplicates(byte j)
 	{
-		boolean isduplicate = false;
 		for (byte k = 0; k < j; k++)
 		{
 			if (drawn_shapes[j] == drawn_shapes[k])
 			{
 				drawn_shapes[j] = r.nextInt(32);
-				isduplicate = true;
 			}
 		}
-		return isduplicate;
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0)
+	{
+		nextScreen();
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }
