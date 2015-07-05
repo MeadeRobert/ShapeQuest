@@ -58,8 +58,7 @@ public class Main extends Applet implements Runnable, MouseListener
 			{
 				h = 1;
 			}
-			else
-			{
+			else {
 				h = 3;
 			}
 			for (byte k = 0; k < 2; k++)
@@ -76,7 +75,6 @@ public class Main extends Applet implements Runnable, MouseListener
 	@Override
 	public void start()
 	{
-
 		nextScreen();
 		_thread.start();
 	}
@@ -84,7 +82,6 @@ public class Main extends Applet implements Runnable, MouseListener
 	@Override
 	public void run()
 	{
-
 		while (true)
 		{
 			_level = (int) _score / 10;
@@ -150,7 +147,6 @@ public class Main extends Applet implements Runnable, MouseListener
 	@Override
 	public void paint(Graphics g)
 	{
-
 		// paint initial objects
 		for (byte i = 0; i < _shapes.length; i++)
 		{
@@ -224,7 +220,7 @@ public class Main extends Applet implements Runnable, MouseListener
 					}
 					// check for click on possible answer triangle
 				}
-				else if (_shapes[i].getSides() == 3)
+				if (_shapes[i].getSides() == 3)
 				{
 					if (e.getX() > _shapes[i].getShapeX() - _shapes[i].getSize()
 							&& e.getX() < _shapes[i].getShapeX()
@@ -242,10 +238,6 @@ public class Main extends Applet implements Runnable, MouseListener
 					{
 						_gameover = true;
 					}
-				}
-				else
-				{
-					System.out.println("How did you make this print?!?");
 				}
 			}
 		}
