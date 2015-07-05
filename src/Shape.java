@@ -4,9 +4,6 @@ import java.util.Random;
 
 public class Shape {
 
-	//class specific random
-	private Random r = new Random();
-	
 	//shape variables
 	private int shapex;
 	private int shapey;
@@ -18,48 +15,46 @@ public class Shape {
 	private int shapewidth;
 	
 	//other variables
-	private Main m;
-
+	private Main _main;
+	private Random _random;
 	
-	
-	public Shape(int sides, int color, int style, int shapex, int shapey, Main m) {
+	public Shape(int sides, int color, int style, int shapex, int shapey, Main m, Random random) {
 		this.sides = sides;
 		this.color = color;
 		this.style = style;
-		this.setM(m);
+		this._main = m;
 		this.shapex = shapex;
 		this.shapey = shapey;
+		this._random = random;
 	}
 
 	public void paint(Graphics g) {
-		// declare array variables for points on polygons
 
-		// TODO implement size control and color switch case
 		switch (this.color) {
-		case 1:
-			g.setColor(Color.white);
-			break;
-		case 2:
-			g.setColor(Color.red);
-			break;
-		case 3:
-			g.setColor(Color.pink);
-			break;
-		case 4:
-			g.setColor(Color.yellow);
-			break;
-		case 5:
-			g.setColor(Color.green);
-			break;
-		case 6:
-			g.setColor(Color.cyan);
-			break;
-		case 7:
-			g.setColor(Color.blue);
-			break;
-		case 8:
-			g.setColor(Color.magenta);
-			break;
+			case 1:
+				g.setColor(Color.white);
+				break;
+			case 2:
+				g.setColor(Color.red);
+				break;
+			case 3:
+				g.setColor(Color.pink);
+				break;
+			case 4:
+				g.setColor(Color.yellow);
+				break;
+			case 5:
+				g.setColor(Color.green);
+				break;
+			case 6:
+				g.setColor(Color.cyan);
+				break;
+			case 7:
+				g.setColor(Color.blue);
+				break;
+			case 8:
+				g.setColor(Color.magenta);
+				break;
 		}
 
 		switch (this.sides) {
@@ -156,19 +151,19 @@ public class Shape {
 	}
 
 	public Random getR() {
-		return r;
+		return _random;
 	}
 
 	public void setR(Random r) {
-		this.r = r;
+		this._random = r;
 	}
 
 	public Main getM() {
-		return m;
+		return _main;
 	}
 
 	public void setM(Main m) {
-		this.m = m;
+		this._main = m;
 	}
 	
 }

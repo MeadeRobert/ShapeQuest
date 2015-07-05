@@ -10,32 +10,34 @@ import java.util.Random;
 public class Main extends Applet implements Runnable, MouseListener
 {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 300000;
 
-	// initialize variables for basic graphics
-	private Graphics gg;
-	private Image ii;
-	private Random r = new Random();
-
-	// process threads
-	Thread thread = new Thread(this);
-
-	// other objects and variables
-	Shape possible_shapes[] = new Shape[32];
-	Shape shapes[] = new Shape[7];
-	int drawn_shapes[] = new int[shapes.length];
-	Shape answer;
-	int answernum;
-	int score = 0;
-	int second = 240;
-	int time;
-	int level = 0;
-	boolean gameover;
-	Font font = new Font("Serif", Font.BOLD, 32);
-
+	//graphics
+	private Graphics _gg;
+	private Image _ii;
+	private Font _font = new Font("Serif", Font.BOLD, 32);
+	
+	private Thread _thread = new Thread(this);
+	
+	//shapes
+	private Shape _possible_shapes[] = new Shape[32];
+	private Shape _shapes[] = new Shape[7];
+	private Shape _answer;
+	
+	//shape numbers
+	private int _drawnShapes[] = new int[_shapes.length];
+	private int _answernum;
+	
+	//score and time
+	private int _score = 0;
+	private int _rawTime = 240;
+	private int _time;
+	private int _level = 0;
+	
+	private boolean _gameover;
+	
+	private Random _random = new Random();
+	
 	@Override
 	public void init()
 	{
@@ -64,7 +66,7 @@ public class Main extends Applet implements Runnable, MouseListener
 			{
 				for (byte l = 1; l < 9; l++)
 				{
-					possible_shapes[i] = new Shape(h, l, k, 200, 200, this);
+					_possible_shapes[i] = new Shape(h, l, k, 200, 200, this, _random);
 					i++;
 				}
 			}
@@ -76,7 +78,7 @@ public class Main extends Applet implements Runnable, MouseListener
 	{
 
 		nextScreen();
-		thread.start();
+		_thread.start();
 	}
 
 	@Override
@@ -85,17 +87,17 @@ public class Main extends Applet implements Runnable, MouseListener
 
 		while (true)
 		{
-			level = (int) score / 10;
+			_level = (int) _score / 10;
 
-			second--;
-			time = (int) (second / (60));
-			if (time <= 0)
+			_rawTime--;
+			_time = (int) (_rawTime / (60));
+			if (_time <= 0)
 			{
-				time = 0;
-				gameover = true;
+				_time = 0;
+				_gameover = true;
 			}
 
-			if (gameover)
+			if (_gameover)
 			{
 				restart();
 			}
@@ -130,19 +132,19 @@ public class Main extends Applet implements Runnable, MouseListener
 	public void update(Graphics g)
 	{
 		// double buffering code
-		if (ii == null)
+		if (_ii == null)
 		{
-			ii = createImage(this.getWidth(), this.getHeight());
-			gg = ii.getGraphics();
+			_ii = createImage(this.getWidth(), this.getHeight());
+			_gg = _ii.getGraphics();
 		}
 
-		gg.setColor(getBackground());
-		gg.fillRect(0, 0, this.getWidth(), this.getHeight());
+		_gg.setColor(getBackground());
+		_gg.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-		gg.setColor(getForeground());
-		paint(gg);
+		_gg.setColor(getForeground());
+		paint(_gg);
 
-		g.drawImage(ii, 0, 0, this);
+		g.drawImage(_ii, 0, 0, this);
 	}
 
 	@Override
@@ -150,9 +152,9 @@ public class Main extends Applet implements Runnable, MouseListener
 	{
 
 		// paint initial objects
-		for (byte i = 0; i < shapes.length; i++)
+		for (byte i = 0; i < _shapes.length; i++)
 		{
-			shapes[i].paint(g);
+			_shapes[i].paint(g);
 		}
 
 		// draw answer, time, and score box
@@ -163,82 +165,82 @@ public class Main extends Applet implements Runnable, MouseListener
 		g.drawRoundRect(1, this.getHeight() - 52, 150, 52, 10, 10);
 
 		// draw time string
-		String s = Integer.toString(time);
-		g.setFont(font);
+		String s = Integer.toString(_time);
+		g.setFont(_font);
 		g.setColor(Color.lightGray);
 		g.drawString(s, getWidth() / 2 - 10 + 2, 50 - 2);
 		g.setColor(Color.white);
 		g.drawString(s, getWidth() / 2 - 10, 50);
 
 		// draw score string
-		String s1 = "score: " + Integer.toString(score);
-		g.setFont(font);
+		String s1 = "score: " + Integer.toString(_score);
+		g.setFont(_font);
 		g.setColor(Color.lightGray);
 		g.drawString(s1, getWidth() - 180 + 2, 50 - 2);
 		g.setColor(Color.white);
 		g.drawString(s1, getWidth() - 180, 50);
 
 		// draw level string
-		String s2 = "level:" + Integer.toString(level);
-		g.setFont(font);
+		String s2 = "level:" + Integer.toString(_level);
+		g.setFont(_font);
 		g.setColor(Color.lightGray);
 		g.drawString(s2, 7, this.getHeight() - 12);
 		g.setColor(Color.white);
 		g.drawString(s2, 5, this.getHeight() - 10);
 
 		// draw correct shape in answer box
-		answer.paint(g);
+		_answer.paint(g);
 
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e)
 	{
-		for (byte i = 0; i < shapes.length; i++)
+		for (byte i = 0; i < _shapes.length; i++)
 		{
 			// check for click on possible answer circle
-			if (i == answernum)
+			if (i == _answernum)
 			{
-				if (shapes[i].getSides() == 1)
+				if (_shapes[i].getSides() == 1)
 				{
-					if (e.getX() > shapes[i].getShapeX()
-							&& e.getX() < shapes[i].getShapeX()
-									+ shapes[i].getSize())
+					if (e.getX() > _shapes[i].getShapeX()
+							&& e.getX() < _shapes[i].getShapeX()
+									+ _shapes[i].getSize())
 					{
-						if (e.getY() > shapes[i].getShapeY()
-								&& e.getY() < shapes[i].getShapeY()
-										+ shapes[i].getSize())
+						if (e.getY() > _shapes[i].getShapeY()
+								&& e.getY() < _shapes[i].getShapeY()
+										+ _shapes[i].getSize())
 						{
-							score++;
+							_score++;
 						}
 						else
 						{
-							gameover = true;
+							_gameover = true;
 						}
 					}
 					else
 					{
-						gameover = true;
+						_gameover = true;
 					}
 					// check for click on possible answer triangle
 				}
-				else if (shapes[i].getSides() == 3)
+				else if (_shapes[i].getSides() == 3)
 				{
-					if (e.getX() > shapes[i].getShapeX() - shapes[i].getSize()
-							&& e.getX() < shapes[i].getShapeX()
-									+ shapes[i].getSize())
+					if (e.getX() > _shapes[i].getShapeX() - _shapes[i].getSize()
+							&& e.getX() < _shapes[i].getShapeX()
+									+ _shapes[i].getSize())
 					{
-						if (e.getY() < shapes[i].getShapeY()
-								&& e.getY() > shapes[i].getShapeY()
-										- shapes[i].getShapeHeight())
+						if (e.getY() < _shapes[i].getShapeY()
+								&& e.getY() > _shapes[i].getShapeY()
+										- _shapes[i].getShapeHeight())
 						{
-							score++;
+							_score++;
 						}
 
 					}
 					else
 					{
-						gameover = true;
+						_gameover = true;
 					}
 				}
 				else
@@ -253,52 +255,52 @@ public class Main extends Applet implements Runnable, MouseListener
 
 	public void restart()
 	{
-		gameover = false;
-		answernum = r.nextInt(shapes.length);
-		score = 0;
+		_gameover = false;
+		_answernum = _random.nextInt(_shapes.length);
+		_score = 0;
 	}
 
 	public void nextScreen()
 	{
 
-		for (byte i = 0; i < drawn_shapes.length; i++)
+		for (byte i = 0; i < _drawnShapes.length; i++)
 		{
-			drawn_shapes[i] = 0;
+			_drawnShapes[i] = 0;
 		}
 		
 		// reset timer
-		second = 240;
+		_rawTime = 240;
 
 		// setup answer array position
-		answernum = r.nextInt(shapes.length);
+		_answernum = _random.nextInt(_shapes.length);
 
-		for (byte j = 0; j < drawn_shapes.length; j++)
+		for (byte j = 0; j < _drawnShapes.length; j++)
 		{
-			drawn_shapes[j] = r.nextInt(32);
+			_drawnShapes[j] = _random.nextInt(32);
 			CorrectDuplicates(j);
 		}
 
-		for (byte i = 0; i < shapes.length; i++)
+		for (byte i = 0; i < _shapes.length; i++)
 		{
-			shapes[i] = possible_shapes[drawn_shapes[i]];
-			shapes[i].setShapeX(r.nextInt((this.getWidth() - 300) - 100) + 250);
-			shapes[i]
-					.setShapeY(r.nextInt((this.getHeight() - 200) - 150) + 150);
-			if (i == answernum)
+			_shapes[i] = _possible_shapes[_drawnShapes[i]];
+			_shapes[i].setShapeX(_random.nextInt((this.getWidth() - 300) - 100) + 250);
+			_shapes[i]
+					.setShapeY(_random.nextInt((this.getHeight() - 200) - 150) + 150);
+			if (i == _answernum)
 			{
 				// for circle
-				if (shapes[i].getSides() == 1)
+				if (_shapes[i].getSides() == 1)
 				{
-					answer = new Shape(shapes[answernum].getSides(),
-							shapes[answernum].getColor(),
-							shapes[answernum].getStyle(), 36, 36, this);
+					_answer = new Shape(_shapes[_answernum].getSides(),
+							_shapes[_answernum].getColor(),
+							_shapes[_answernum].getStyle(), 36, 36, this, _random);
 				// for triangle
 				}
 				else
 				{
-					answer = new Shape(shapes[answernum].getSides(),
-							shapes[answernum].getColor(),
-							shapes[answernum].getStyle(), 100, 150, this);
+					_answer = new Shape(_shapes[_answernum].getSides(),
+							_shapes[_answernum].getColor(),
+							_shapes[_answernum].getStyle(), 100, 150, this, _random);
 				}
 			}
 		}
@@ -309,9 +311,9 @@ public class Main extends Applet implements Runnable, MouseListener
 	{
 		for (byte k = 0; k < j; k++)
 		{
-			if (drawn_shapes[j] == drawn_shapes[k])
+			if (_drawnShapes[j] == _drawnShapes[k])
 			{
-				drawn_shapes[j] = r.nextInt(32);
+				_drawnShapes[j] = _random.nextInt(32);
 			}
 		}
 
